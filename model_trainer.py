@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder,MinMaxScaler
 import tensorflow as tf
-import pickle
 
 wholedata = pd.read_csv('all_stocks_5yr.csv')
 print(wholedata.info())
@@ -85,6 +84,9 @@ callback = tf.keras.callbacks.EarlyStopping(monitor='loss',patience=4)
 
 model.fit(X_train,Y_train,epochs=50,batch_size=32,callbacks=[callback],verbose=1)
 
+"""saving model"""
+model.save("model.h5")
+
 company_label=int(input("Enter the company label no :"))
 test_data = wholedata.loc[wholedata['Name']==company_label]
 test_data = test_data.loc[:,test_data.columns == 'close']
@@ -122,6 +124,3 @@ plt.xlabel('Time')
 plt.ylabel('Stock Price')
 plt.legend()
 plt.show()
-
-"""saving model"""
-pickle.dump(model,open('model.pkl','wb'))
